@@ -46,6 +46,21 @@ while(True):
     # Put here your code!
     # You can now treat output as a normal numpy array
     # Do your magic here
-    print("Got an image",frame)
+    height, width, _ = frame.shape
+    # Calculate the height of each split
+    split_height = height // num_splits
+
+    for i in range(num_splits):
+        # Define the region of interest (ROI) for each split
+        y_start = i * split_height
+        y_end = (i + 1) * split_height if i < num_splits - 1 else height  # To handle the last split
+        roi = frame[y_start:y_end, :]
+
+        # Calculate the strongest RGB color in each split
+        avg_color = np.mean(roi, axis=(0, 1))  # Mean of the pixels (BGR format)
+        avg_color_rgb = avg_color[::-1]  # Convert to RGB from BGR
+
+        print(f"Split {i + 1}: Strongest RGB color: {avg_color_rgb}")
+
 
     sleep(1)
