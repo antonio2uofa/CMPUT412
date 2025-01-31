@@ -2,6 +2,12 @@
 import cv2
 import numpy as np
 from time import sleep
+import os
+
+# Get the number of splits from the environment variable
+num_splits = int(os.environ.get('NUM_SPLITS', 2))  # Default to 2 splits if not set
+
+print(f"Dividing the image into {num_splits} horizontal splits.")
 
 
 def gst_pipeline_string():
