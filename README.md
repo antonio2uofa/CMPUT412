@@ -20,9 +20,8 @@ Instructions on setting up the project environment and dependencies will be adde
 
 ## Future Updates
 
-- **Lane Following**: Upcoming implementations will include more robust lane-following algorithms.
 - **Image Processing**: Plans to integrate advanced image processing techniques for better interaction with the environment.
-- **Docker Integration**: As the project progresses, we will also incorporate containerized deployments using Docker for easier setup and execution.
+- **Autonomous Driving** Upcoming implementations will include more robust autonomous driving implementations.
 
 ## Conclusion
 
