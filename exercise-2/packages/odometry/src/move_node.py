@@ -176,7 +176,7 @@ class MoveNode(DTROS):
             self._publisher.publish(message)
             rospy.loginfo("Driving straight...")
             # Set light colour
-            while self.compute_distance_straight() < distance:
+            while abs(self.compute_distance_straight()) < distance:
                 rospy.loginfo(
                     f"Distance traveled: {self.compute_distance_straight():.2f} m")
                 self._rate.sleep()
@@ -233,86 +233,115 @@ class MoveNode(DTROS):
             rospy.logerr(f"Service call failed: {e}")
 
     def run(self):
-        rospy.sleep(2)  # Wait for initialization
-        self.change_led_color(self.color_dict["red"])
-        rospy.sleep(5)
+        # rospy.sleep(2)  # Wait for initialization
+        # self.change_led_color(self.color_dict["red"])
+        # rospy.sleep(5)
+        # self.change_led_color(self.color_dict["green"])
+
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=1.1, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
+        # self.rotate(angle=pi/2, rot_cw=True)
+        # rospy.sleep(1)
+
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=0.7, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
+
+        # d_outer, d_inner = self.compute_distance_to_curve(
+        #     radius=0.15, angle=pi / 2)
+        # vel_left, vel_right = self.compute_velocities_curved(
+        #     ratio_din_dout=d_inner/d_outer, right_turn=True)
+        # self.drive(vel_left=vel_left, vel_right=vel_right,
+        #            distance=d_outer, section_id=SectionID.CURVE)
+        # rospy.sleep(1)
+
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=0.4, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
+
+        # d_outer, d_inner = self.compute_distance_to_curve(
+        #     radius=0.15, angle=pi / 2)
+        # vel_left, vel_right = self.compute_velocities_curved(
+        #     ratio_din_dout=d_inner/d_outer, right_turn=True)
+        # self.drive(vel_left=vel_left, vel_right=vel_right,
+        #            distance=d_outer, section_id=SectionID.CURVE)
+        # rospy.sleep(1)
+
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=0.7, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
+
+        # self.rotate(angle=pi/2, rot_cw=True)
+        # rospy.sleep(5)
+
+        # self.change_led_color(self.color_dict["red"])
+        # rospy.sleep(2)
+
+        # Move straight for 0.5 meters
+        rospy.sleep(2)
         self.change_led_color(self.color_dict["green"])
-
         self.drive(vel_left=self._velocity, vel_right=self._velocity,
-                   distance=1.1, section_id=SectionID.STRAIGHT)
-        rospy.sleep(1)
-        self.rotate(angle=pi/2, rot_cw=True)
+                   distance=0.5, section_id=SectionID.STRAIGHT)
         rospy.sleep(1)
 
-        self.drive(vel_left=self._velocity, vel_right=self._velocity,
-                   distance=0.7, section_id=SectionID.STRAIGHT)
+        # Rotate anti-clockwise 90 degrees
+        self.rotate(angle=pi/2, rot_cw=False)
         rospy.sleep(1)
 
-        d_outer, d_inner = self.compute_distance_to_curve(
-            radius=0.15, angle=pi / 2)
-        vel_left, vel_right = self.compute_velocities_curved(
-            ratio_din_dout=d_inner/d_outer, right_turn=True)
-        self.drive(vel_left=vel_left, vel_right=vel_right,
-                   distance=d_outer, section_id=SectionID.CURVE)
+        # Drive in reverse direction for 0.3 meters
+        self.drive(vel_left=-self._velocity, vel_right=-self._velocity,
+                   distance=0.3, section_id=SectionID.STRAIGHT)
         rospy.sleep(1)
-
-        self.drive(vel_left=self._velocity, vel_right=self._velocity,
-                   distance=0.4, section_id=SectionID.STRAIGHT)
-        rospy.sleep(1)
-
-        d_outer, d_inner = self.compute_distance_to_curve(
-            radius=0.15, angle=pi / 2)
-        vel_left, vel_right = self.compute_velocities_curved(
-            ratio_din_dout=d_inner/d_outer, right_turn=True)
-        self.drive(vel_left=vel_left, vel_right=vel_right,
-                   distance=d_outer, section_id=SectionID.CURVE)
-        rospy.sleep(1)
-
-        self.drive(vel_left=self._velocity, vel_right=self._velocity,
-                   distance=0.7, section_id=SectionID.STRAIGHT)
-        rospy.sleep(1)
-
-        self.rotate(angle=pi/2, rot_cw=True)
-        rospy.sleep(5)
 
         self.change_led_color(self.color_dict["red"])
         rospy.sleep(2)
 
-        # while not rospy.is_shutdown():
-        #     distance = self.compute_distance_straight()
-        #     rospy.loginfo(f"Distance traveled: {distance:.2f} m")
+        # CODE FOR SQUARE
+        # rospy.sleep(2)
+        # self.change_led_color(self.color_dict["red"])
+        # rospy.sleep(5)
+        # self.change_led_color(self.color_dict["green"])
 
-        #     if self._moving_forward and distance >= 1.25:
-        #         self._moving_forward = False
-        #         self._vel_left = self._velocity * -1  # Reverse direction
-        #         self._vel_right = self._velocity * -1
+        # # First side of the square
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=1.1, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
 
-        #     if not self._moving_forward and distance <= 0:
-        #         self._vel_left = 0
-        #         self._vel_right = 0
-        #         rospy.loginfo("Done moving.")
-        #         break
+        # # First 90-degree clockwise rotation
+        # self.rotate(angle=pi/2, rot_cw=True)
+        # rospy.sleep(1)
 
-        #     self.drive_straight()
-        #     self._rate.sleep()
-        # distance = self.compute_distance_rotated()
-        # rospy.loginfo(f"Distance traveled: {distance:.2f} m")
-        # if self._rotating_cw:
-        #     self._vel_right = self._velocity * -1
-        #     self._vel_left = self._velocity
-        # if self._rotating_cw and distance <= self._distance_to_rotate_cw:
-        #     self._rotating_cw = False
-        #     self._vel_right = self._velocity
-        #     self._vel_left = self._velocity * -1
+        # # Second side of the square
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=1.1, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
 
-        # if not self._rotating_cw and distance >= 0:
-        #     self._vel_right = 0
-        #     self._vel_left = 0
-        #     rospy.loginfo("Done moving.")
-        #     break
+        # # Second 90-degree clockwise rotation
+        # self.rotate(angle=pi/2, rot_cw=True)
+        # rospy.sleep(1)
 
-        # self.drive_straight()
-        # self._rate.sleep()
+        # # Third side of the square
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=1.1, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
+
+        # # Third 90-degree clockwise rotation
+        # self.rotate(angle=pi/2, rot_cw=True)
+        # rospy.sleep(1)
+
+        # # Fourth side of the square
+        # self.drive(vel_left=self._velocity, vel_right=self._velocity,
+        #            distance=1.1, section_id=SectionID.STRAIGHT)
+        # rospy.sleep(1)
+
+        # # Fourth 90-degree clockwise rotation to complete the square
+        # self.rotate(angle=pi/2, rot_cw=True)
+        rospy.sleep(5)
+
+        # Change LED color to indicate the square path is complete
+        self.change_led_color(self.color_dict["red"])
+        rospy.sleep(2)
 
         # Explicitly call on_shutdown after exiting the loop
         self.on_shutdown()
