@@ -1,0 +1,11 @@
+# SetLEDColor.srv
+
+# Request: RGB values for LED
+float32 r
+float32 g
+float32 b
+float32 a
+
+---
+# Response: success flag
+bool success

@@ -10,30 +10,31 @@ from sensor_msgs.msg import CompressedImage, Image
 import cv2
 from cv_bridge import CvBridge
 
+
 class CameraReaderNode(DTROS):
 
     def __init__(self, node_name):
         # initialize the DTROS parent class
-        super(CameraReaderNode, self).__init__(node_name=node_name, node_type=NodeType.VISUALIZATION)
+        super(CameraReaderNode, self).__init__(
+            node_name=node_name, node_type=NodeType.VISUALIZATION)
         # static parameters
         self._hostname = uname()[1]
 
         if not match(r"^csc\d+$", self._hostname):
             print("Pass in the hostname of the bot ![DUCKIEBOT]:")
             self._hostname = input()
-        
+
         self._vehicle_name = self._hostname
         self._camera_topic = f"/{self._vehicle_name}/camera_node/image/compressed"
         self._custom_topic = f"/annotated_image"
+        self.radius = rospy.get_param(
+            f'/{self._vehicle_name}/kinematics_node/radius')
         # bridge between OpenCV and ROS
         self._bridge = CvBridge()
 
-        # create window
-        # self._window = "camera-reader"
-        # cv2.namedWindow(self._window, cv2.WINDOW_AUTOSIZE)
-
         # construct subscriber
-        self.sub = rospy.Subscriber(self._camera_topic, CompressedImage, self.callback)
+        self.sub = rospy.Subscriber(
+            self._camera_topic, CompressedImage, self.callback)
         self.pub = rospy.Publisher(self._custom_topic, Image, queue_size=10)
 
     def callback(self, msg):
@@ -41,7 +42,8 @@ class CameraReaderNode(DTROS):
         image = self._bridge.compressed_imgmsg_to_cv2(msg)
         width, height, _ = image.shape
         print("width:", width, "height:", height)
-        
+        print("radius", self.radius)
+
         # convert to grayscale
         gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         size_text = f"{width}X{height}"
@@ -63,8 +65,9 @@ class CameraReaderNode(DTROS):
 
         # Convert back to ROS Image message
         annotated_msg = self._bridge.cv2_to_imgmsg(annotated_image)
-        
+
         self.pub.publish(annotated_msg)
+
 
 if __name__ == '__main__':
     # create the node
