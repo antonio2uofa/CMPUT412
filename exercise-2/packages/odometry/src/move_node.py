@@ -278,6 +278,10 @@ class MoveNode(DTROS):
         # self.change_led_color(self.color_dict["red"])
         # rospy.sleep(2)
 
+<<<<<<< Updated upstream
+=======
+        # REVERSE PARKING MINI PART
+>>>>>>> Stashed changes
         # Move straight for 0.5 meters
         rospy.sleep(2)
         self.change_led_color(self.color_dict["green"])
